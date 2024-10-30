@@ -15,6 +15,7 @@ body {
     background-color: #f4f4f4;
 }
 
+/* Container principal para cada tela */
 .container {
     display: flex;
     flex-direction: column;
@@ -27,10 +28,20 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-h2 {
+h1, h2 {
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+h1{
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: 10px;
+}
+
+h2{
+    font-weight: normal;
+    font-size: 18px;
 }
 
 p {
@@ -39,6 +50,7 @@ p {
     margin-bottom: 20px;
 }
 
+/* Labels e Inputs */
 label {
     font-size: 14px;
     color: #333;
@@ -48,7 +60,8 @@ label {
 
 input[type="email"],
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+textarea {
     display: flex;
     align-items: center;
     width: 100%;
@@ -59,6 +72,12 @@ input[type="password"] {
     font-size: 16px;
 }
 
+textarea {
+    resize: vertical;
+    font-family: Arial, sans-serif;
+}
+
+/* Campo de senha com ícone */
 .password-input {
     position: relative;
 }
@@ -79,7 +98,8 @@ input[type="password"] {
     cursor: pointer;
 }
 
-.btn {
+/* Botões gerais */
+.btn, .logout-btn {
     width: 100%;
     padding: 10px;
     background-color: #1a73e8;
@@ -90,6 +110,10 @@ input[type="password"] {
     border-radius: 8px;
     cursor: pointer;
     margin-top: 10px;
+}
+
+.btn:hover, .logout-btn:hover {
+    background-color: #1558b0;
 }
 
 .login-link {
@@ -108,32 +132,15 @@ input[type="password"] {
     text-decoration: underline;
 }
 
-.logo{
+.logo {
     width: 100%;
-}
-
-h1 {
-    font-size: 26px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-    resize: vertical;
 }
 
 .results-container {
     margin-bottom: 20px;
 }
 
+/* Lista de candidatos */
 .candidates {
     list-style-type: none;
     padding: 0;
@@ -150,6 +157,7 @@ textarea {
     text-align: center;
 }
 
+/* Gráfico de resultados */
 .chart {
     display: flex;
     align-items: center;
@@ -164,6 +172,7 @@ textarea {
     margin-bottom: 20px;
 }
 
+/* Botões de navegação */
 .buttons {
     display: flex;
     justify-content: space-around;
@@ -193,7 +202,7 @@ textarea {
     background-color: #ccc;
 }
 
-/* Estilo para a página de candidatos */
+/* Página de candidatos */
 .candidates-container {
     display: flex;
     flex-direction: column;
@@ -212,7 +221,6 @@ textarea {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 100%;
     max-width: 400px;
-    text-align: center;
 }
 
 .candidate-card img {
@@ -238,4 +246,35 @@ textarea {
 .candidate-card .btn {
     margin-top: 15px;
     width: 100%;
+}
+
+/* Rodapé de navegação */
+.footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer a {
+    text-align: center;
+    color: #555;
+    font-size: 14px;
+    text-decoration: none;
+    flex: 1;
+}
+
+.footer a.active {
+    color: #1a73e8;
+    font-weight: bold;
+}
+
+.footer a span {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 5px;
 }
