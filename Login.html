@@ -1,48 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
-  <div class="container">
-    <img src="assets/img/logoUlife.png" alt="Logo" class="logo">
-    <section class="login-section">
-      <h2>Faça Login</h2>
-      <p>Entre na sua conta para votar!</p>
-    </section>
-      
-    <section class="login-section">
-      <label for="ra">RA</label>
-      <input type="text" id="ra" placeholder="Insira seu RA">
-    
-      <label for="senha">Senha</label>
-      <div class="password-input">
-        <input type="password" id="senha" placeholder="Insira sua senha">
-        <button class="password-toggle" onclick="togglePassword('senha')">👁️</button>
-      </div>
-      
-      <button class="btn">Entrar</button>
-    </section>
-    
-    <section>
-      <div class="register-link">
-        <p>Não possui conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
-      </div>
-    </section>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <img src="assets/img/logoUlife.png" alt="Logo" class="logo" />
+      <section class="login-section">
+        <h2>Faça Login</h2>
+        <p>Entre na sua conta para votar!</p>
+      </section>
 
+      <section class="login-section">
+        <label for="ra">RA</label>
+        <input type="text" id="ra" placeholder="Insira seu RA" />
+
+        <label for="senha">Senha</label>
+        <div class="password-input">
+          <input type="password" id="senha" placeholder="Insira sua senha" />
+          <button class="password-toggle" onclick="togglePassword('senha')">
+            <i class="material-icons" id="toggle-icon">visibility_off</i>
+          </button>
+        </div>
+
+        <button class="btn">Entrar</button>
+      </section>
+
+      <section>
+        <div class="register-link">
+          <p>Não possui conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+        </div>
+      </section>
+    </div>
+  </body>
   <script>
     function togglePassword(fieldId) {
       const field = document.getElementById(fieldId);
+      const icon = document.getElementById("toggle-icon");
+
       if (field.type === "password") {
         field.type = "text";
+        icon.textContent = "visibility"; // Mostra o ícone de "olho aberto"
       } else {
         field.type = "password";
+        icon.textContent = "visibility_off"; // Mostra o ícone de "olho fechado"
       }
     }
   </script>
-</body>
 </html>

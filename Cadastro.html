@@ -1,53 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Usuário</title>
-  <link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Usuário</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <img src="assets/img/logoUlife.png" alt="Logo" class="logo" />
+      <section>
+        <h2>Cadastro de Usuário</h2>
+        <p>Crie uma conta para votar!</p>
+      </section>
 
-  <div class="container">
-    <img src="assets/img/logoUlife.png" alt="Logo" class="logo">
-    <section>
-      <h2>Cadastro de Usuário</h2>
-      <p>Crie uma conta para votar!</p>
-    </section>
-    
-    <section>
-      <label for="ra">RA</label>
-      <input type="text" id="ra" placeholder="Insira seu RA">
-      
-      <label for="senha">Senha</label>
-      <div class="password-input">
-        <input type="password" id="senha" placeholder="Insira sua senha">
-        <button class="password-toggle" onclick="togglePassword('senha')">👁️</button>
+      <section>
+        <label for="ra">RA</label>
+        <input type="text" id="ra" placeholder="Insira seu RA" />
+
+        <label for="senha">Senha</label>
+        <div class="password-input">
+          <input type="password" id="senha" placeholder="Insira sua senha" />
+          <button
+            class="password-toggle"
+            onclick="togglePassword('senha', 'toggle-icon-senha')"
+          >
+            <i class="material-icons" id="toggle-icon-senha">visibility_off</i>
+          </button>
+        </div>
+
+        <label for="confirma-senha">Confirme a senha</label>
+        <div class="password-input">
+          <input
+            type="password"
+            id="confirma-senha"
+            placeholder="Confirme a senha"
+          />
+          <button
+            class="password-toggle"
+            onclick="togglePassword('confirma-senha', 'toggle-icon-confirma')"
+          >
+            <i class="material-icons" id="toggle-icon-confirma"
+              >visibility_off</i
+            >
+          </button>
+        </div>
+      </section>
+
+      <button class="btn">Cadastrar</button>
+
+      <div class="login-link">
+        <p>Já possui conta? <a href="login.html">Entre aqui</a></p>
       </div>
-      
-      <label for="confirma-senha">Confirme a senha</label>
-      <div class="password-input">
-        <input type="password" id="confirma-senha" placeholder="Confirme a senha">
-        <button class="password-toggle" onclick="togglePassword('confirma-senha')">👁️</button>
-      </div>
-    </section>
-    
-    <button class="btn">Cadastrar</button>
-    
-    <div class="login-link">
-      <p>Já possui conta? <a href="login.html">Entre aqui</a></p>
     </div>
-  </div>
-
+  </body>
   <script>
-    function togglePassword(fieldId) {
+    function togglePassword(fieldId, iconId) {
       const field = document.getElementById(fieldId);
+      const icon = document.getElementById(iconId);
+
       if (field.type === "password") {
         field.type = "text";
+        icon.textContent = "visibility"; // Ícone de olho aberto
       } else {
         field.type = "password";
+        icon.textContent = "visibility_off"; // Ícone de olho fechado
       }
     }
   </script>
-</body>
 </html>
