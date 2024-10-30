@@ -9,31 +9,33 @@
 <body>
 
   <div class="container">
-    <h2>Cadastro de Usuário</h2>
-    <p>Crie uma conta para votar!</p>
+    <img src="assets/img/logoUlife.png" alt="Logo" class="logo">
+    <section>
+      <h2>Cadastro de Usuário</h2>
+      <p>Crie uma conta para votar!</p>
+    </section>
     
-    <label for="email">Email</label>
-    <input type="email" id="email" placeholder="Insira seu email">
-    
-    <label for="ra">RA</label>
-    <input type="text" id="ra" placeholder="Insira seu RA">
-    
-    <label for="senha">Senha</label>
-    <div class="password-input">
-      <input type="password" id="senha" placeholder="Insira sua senha">
-      <button class="password-toggle" onclick="togglePassword('senha')">👁️</button>
-    </div>
-    
-    <label for="confirma-senha">Confirme a senha</label>
-    <div class="password-input">
-      <input type="password" id="confirma-senha" placeholder="Confirme a senha">
-      <button class="password-toggle" onclick="togglePassword('confirma-senha')">👁️</button>
-    </div>
+    <section>
+      <label for="ra">RA</label>
+      <input type="text" id="ra" placeholder="Insira seu RA">
+      
+      <label for="senha">Senha</label>
+      <div class="password-input">
+        <input type="password" id="senha" placeholder="Insira sua senha">
+        <button class="password-toggle" onclick="togglePassword('senha')">👁️</button>
+      </div>
+      
+      <label for="confirma-senha">Confirme a senha</label>
+      <div class="password-input">
+        <input type="password" id="confirma-senha" placeholder="Confirme a senha">
+        <button class="password-toggle" onclick="togglePassword('confirma-senha')">👁️</button>
+      </div>
+    </section>
     
     <button class="btn">Cadastrar</button>
     
     <div class="login-link">
-      <p>Já possui conta? <a href="#">Entre aqui</a></p>
+      <p>Já possui conta? <a href="login.html">Entre aqui</a></p>
     </div>
   </div>
 

@@ -8,24 +8,30 @@
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="Logo" class="logo">
-    <h2>Faça Login</h2>
-    <p>Entre na sua conta para votar!</p>
+    <img src="assets/img/logoUlife.png" alt="Logo" class="logo">
+    <section class="login-section">
+      <h2>Faça Login</h2>
+      <p>Entre na sua conta para votar!</p>
+    </section>
+      
+    <section class="login-section">
+      <label for="ra">RA</label>
+      <input type="text" id="ra" placeholder="Insira seu RA">
     
-    <label for="ra-email">RA ou Email</label>
-    <input type="text" id="ra-email" placeholder="Insira seu RA ou Email">
+      <label for="senha">Senha</label>
+      <div class="password-input">
+        <input type="password" id="senha" placeholder="Insira sua senha">
+        <button class="password-toggle" onclick="togglePassword('senha')">👁️</button>
+      </div>
+      
+      <button class="btn">Entrar</button>
+    </section>
     
-    <label for="senha">Senha</label>
-    <div class="password-input">
-      <input type="password" id="senha" placeholder="Insira sua senha">
-      <button class="password-toggle" onclick="togglePassword('senha')">👁️</button>
-    </div>
-    
-    <button class="btn">Entrar</button>
-    
-    <div class="register-link">
-      <p>Não possui conta? <a href="#">Cadastre-se aqui</a></p>
-    </div>
+    <section>
+      <div class="register-link">
+        <p>Não possui conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+      </div>
+    </section>
   </div>
 
   <script>
