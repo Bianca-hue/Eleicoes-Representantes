@@ -28,6 +28,18 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.flex-center{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flex-start{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
 h1, h2 {
     color: #333;
     margin-bottom: 10px;
@@ -102,6 +114,11 @@ textarea {
     display: flex;
     justify-content: space-around;
     gap: 10px;
+    font-size: 12px;
+
+    & .btn{
+        font-size: 12px;
+    }
 }
 
 /* Botões gerais */
@@ -112,6 +129,7 @@ textarea {
     gap: 5px;
     justify-content: center;
     width: 100%;
+    min-width: 30%;
     padding: 10px;
     font-size: 16px;
     font-weight: bold;
@@ -119,6 +137,20 @@ textarea {
     border-radius: 8px;
     cursor: pointer;
     margin-top: 10px;
+}
+
+.profile-photo{
+    width: 35%; 
+    border-radius: 20px;
+    border: 1px solid #fff;
+    margin-bottom: 5%;
+}
+
+.candidate-photo{
+    width: 100%; 
+    border-radius: 20px;
+    border: 1px solid #fff;
+    margin-bottom: 5%;
 }
 
 .btn-primary{
@@ -130,6 +162,11 @@ textarea {
     background-color: #DC3545;
     color: #fff;
 }
+
+.btn-error:hover{
+    background-color: #99232e !important;
+}
+
 
 .btn-success{
     background-color: #28A745;
