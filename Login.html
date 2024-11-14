@@ -24,8 +24,8 @@
       <label for="senha">Senha</label>
       <div class="password-input">
         <input type="password" id="senha" placeholder="Insira sua senha" />
-        <button class="password-toggle" onclick="togglePassword('senha')">
-          <i class="material-icons" id="toggle-icon">visibility_off</i>
+        <button class="password-toggle" onclick="togglePassword('senha','toggle-icon-senha')">
+          <i class="material-icons" id="toggle-icon-senha">visibility_off</i>
         </button>
       </div>
 
@@ -39,19 +39,4 @@
     </section>
   </div>
 </body>
-<script>
-  function togglePassword(fieldId) {
-    const field = document.getElementById(fieldId);
-    const icon = document.getElementById("toggle-icon");
-
-    if (field.type === "password") {
-      field.type = "text";
-      icon.textContent = "visibility"; // Mostra o ícone de "olho aberto"
-    } else {
-      field.type = "password";
-      icon.textContent = "visibility_off"; // Mostra o ícone de "olho fechado"
-    }
-  }
-</script>
-
 </html>
