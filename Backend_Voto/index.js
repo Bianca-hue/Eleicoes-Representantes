@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./db')
 const app = express();
+const bcrypt = require('bcrypt'); // Importa bcrypt para hash de senha
 
 // Configurar middleware para JSON
 app.use(express.json());
@@ -14,7 +15,7 @@ app.get('/', (req, res) => {
 
 //Cadastrar candidato
 app.post('/candidato', (req, res) => {
-    const { nome, idade, foto, descricao } = req.body;
+    const { nome, idade=null, foto=null, descricao } = req.body;
     const query = 'INSERT INTO candidatos (nome, idade, foto, descricao) VALUES (?, ?, ?, ?)';
 
     db.query(query, [nome, idade, foto, descricao], (err, result) => {
@@ -59,17 +60,95 @@ app.get('/candidato/:id', (req, res) => {
 
 //Cadastrar Usuário
 app.post('/usuario', (req, res) => {
-    const {nome, email, idade} = req.body;
-    const query = 'INSERT INTO usuarios (nome, email, idade) VALUES (?, ?, ?)';
-
-    db.query(query, [nome, email, idade], (err, result) => {
+    const {nome, email, idade, senha, ra} = req.body;
+    if (!nome) {
+        return res.status(400).send({error: 'Nome é um campo obrigatório'})
+    } else if (!email) {
+        return res.status(400).send({error: 'E-mail é um campo obrigatório'})
+    } else if (!senha) {
+        return res.status(400).send({error: 'Senha é um campo obrigatório'})
+    } else if (!ra) {
+        return res.status(400).send({error: 'RA é um campo obrigatório'})
+    }
+    bcrypt.hash(senha, 10, (err, hash) => {
         if (err) {
-            res.status(500).send({ error: 'Erro ao cadastrar usuário' });
+            return res.status(500).send({error : 'Erro ao criptografar senha'});
+        }
+        
+        const query = 'INSERT INTO usuarios (ra, nome, email, idade, senha) VALUES (?, ?, ?, ?, ?)';
+
+        // Define idade como NULL se não for enviada
+        const idadeFinal = idade || null;
+                
+        db.query(query, [ra, nome, email, idadeFinal, hash], (err, result) => {
+            if (err) {
+                res.status(500).send({ error: 'Erro ao cadastrar usuário' });
+            } else {
+                res.status(201).send({ message: 'Usuário cadastrado com sucesso', id: result.insertId });
+            }
+        });
+    });
+});
+
+// Rota para autenticação de login
+app.post('/login', (req, res) => {
+    const { ra, senha } = req.body; // Recebe RA e senha do cliente
+    const query = 'SELECT id_usuario, nome, email, senha FROM usuarios WHERE ra = ?';
+
+    db.query(query, [ra], (err, results) => {
+        if (err) {
+            res.status(500).send({ error: 'Erro ao realizar login' });
+        } else if (results.length === 0) {
+            res.status(401).send({ message: 'RA ou Senha incorretos' });
         } else {
-            res.status(201).send({ message: 'Usuário cadastrado com sucesso', id: result.insertId });
+            // Verifica se a senha é válida
+            bcrypt.compare(senha, results[0].senha, (err, isMatch) => {
+                if (err) {
+                    res.status(500).send({ error: 'Erro ao comparar senha'})
+                } else if (!isMatch) {
+                    res.status(401).send({ error: 'RA ou Senha incorretos' });
+                } else {
+                    // Enviamos os dados do usuário autenticado
+                    res.send({
+                        message: 'Login realizado com sucesso',
+                        usuario: {
+                            id: results[0].id_usuario,
+                            nome: results[0].nome,
+                            email: results[0].email,
+                        }
+                    });
+                }
+            });
         }
     });
 });
+
+// Adicionar rota para buscar perfil de usuário
+app.get('/perfil/:id', (req, res) => {
+    const { id } = req.params;
+    const query = `
+        SELECT id_usuario, nome, email, idade, voto
+        FROM usuarios
+        WHERE id_usuario = ?
+    `;
+
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            res.status(500).send({ error: 'Erro ao buscar dados do perfil' });
+        } else if (results.length === 0) {
+            res.status(404).send({ message: 'Usuário não encontrado' });
+        } else {
+            res.send(results[0]); // Retorna os dados do usuário encontrado
+        }
+    });
+});
+
+// Rota para desconectar usuário
+app.post('/logout', (req, res) => {
+    res.clearCookie('connect.sid'); // Apenas remove cookies, se necessário
+    res.send({ message: 'Logout realizado com sucesso!' });
+});
+
 
 // Rota para registrar um voto
 app.post('/votar', (req, res) => {
@@ -83,7 +162,7 @@ app.post('/votar', (req, res) => {
         } else if (results.length === 0) {
             res.status(404).send({ message: 'Usuário não encontrado' });
         } else if (results[0].voto !== null) {
-            res.status(400).send({ message: 'Usuário já votou' });
+            res.status(409).send({ message: 'Usuário já votou' });
         } else {
             // Registrar o voto
             const votarQuery = 'UPDATE usuarios SET voto = ? WHERE id_usuario = ?';
@@ -122,6 +201,11 @@ app.get('/resultados', (req, res) => {
     });
 });
 
+// Porta do servidor
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
 
 //Listar usuários (Contagem de votos)
 // app.get('/usuarios', (req, res) => {
@@ -164,9 +248,3 @@ app.get('/resultados', (req, res) => {
 //        }
 //    });
 //});
-
-// Porta do servidor
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
