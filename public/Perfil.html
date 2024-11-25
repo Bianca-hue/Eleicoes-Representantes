@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/script.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Perfil</h1>
+
+    <div class="flex-center">
+      <section class="flex-center">
+        <img class="profile-photo" src="img/fotoPerfil.png" alt="Foto de perfil de Isabella" class="profile-image" />
+        <h1>Isabella</h1>
+        <h2>122854689</h2>
+      </section>
+      
+      <button class="btn">Informações da conta</button>
+      <button class="btn">Candidatar-se</button>
+      <button class="btn">Configuração</button>
+
+      <button class="btn btn-error" onclick="desconectar()">Desconectar</button>
+    </div>
+
+    <div class="nav-bar">
+      <button onclick="window.location.href='candidatosGrid.html'" class="btn btn-primary">
+        <i class="material-icons">how_to_vote</i>
+        Votar
+      </button>
+      <button onclick="window.location.href='resultados.html'" class="btn btn-primary">
+        <i class="material-icons">check</i>
+        Resultados
+      </button>
+      <button onclick="window.location.href='perfil.html'" class="btn btn-primary">
+        <i class="material-icons">person</i>
+        Perfil
+      </button>
+    </div>
+  </div>
+</body>
+<script>
+  function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const icon = document.getElementById("toggle-icon");
+
+    if (field.type === "password") {
+      field.type = "text";
+      icon.textContent = "visibility"; // Mostra o ícone de "olho aberto"
+    } else {
+      field.type = "password";
+      icon.textContent = "visibility_off"; // Mostra o ícone de "olho fechado"
+    }
+  }
+</script>
+
+</html>
