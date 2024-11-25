@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastro de Usuário</title>
+  <title>Login</title>
   <link rel="stylesheet" href="css/style.css" />
   <script src="js/script.js"></script>
 </head>
@@ -12,64 +12,46 @@
 <body>
   <div class="container">
     <img src="img/logoUlife.png" alt="Logo" class="logo" />
-    <section>
-      <h1>Cadastro de Usuário</h1>
-      <h2>Crie uma conta para votar!</h2>
+    <section class="login-section">
+      <h1>Faça Login</h1>
+      <h2>Entre na sua conta para votar!</h2>
     </section>
 
-    <section>
+    <section class="login-section">
       <label for="ra">RA</label>
       <input type="text" id="ra" placeholder="Insira seu RA" />
-      
-      <label for="nome">Nome</label>
-      <input type="text" id="nome" placeholder="Insira seu Nome" />
 
       <label for="senha">Senha</label>
       <div class="password-input">
         <input type="password" id="senha" placeholder="Insira sua senha" />
-        <button class="password-toggle" onclick="togglePassword('senha', 'toggle-icon-senha')">
-          <i class="material-icons" id="toggle-icon-senha">visibility_off</i>
+        <button class="password-toggle" onclick="togglePassword('senha')">
+          <i class="material-icons" id="toggle-icon">visibility_off</i>
         </button>
       </div>
+
+      <button class="btn btn-primary" onclick="login()">Entrar</button>
     </section>
 
-    <button class="btn btn-primary" onclick="inserirUsuario()">Cadastrar</button>
-
-    <div class="login-link">
-      <p>Já possui conta? <a href="login.html">Entre aqui</a></p>
-    </div>
+    <section>
+      <div class="register-link">
+        <p>Não possui conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+      </div>
+    </section>
   </div>
 </body>
 <script>
-  function togglePassword(fieldId, iconId) {
+  function togglePassword(fieldId) {
     const field = document.getElementById(fieldId);
-    const icon = document.getElementById(iconId);
+    const icon = document.getElementById("toggle-icon");
 
     if (field.type === "password") {
       field.type = "text";
-      icon.textContent = "visibility"; // Ícone de olho aberto
+      icon.textContent = "visibility"; // Mostra o ícone de "olho aberto"
     } else {
       field.type = "password";
-      icon.textContent = "visibility_off"; // Ícone de olho fechado
+      icon.textContent = "visibility_off"; // Mostra o ícone de "olho fechado"
     }
   }
-
-  function inserirUsuario() {
-  const data = {
-      ra: document.getElementById('ra').value,
-      nome: document.getElementById('nome').value,
-      senha: document.getElementById('senha').value
-  };
-
-  fetch(`${apiUrl}/cliente`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-  })
-  .then(response => response.json())
-  .then(data => alert(data.message))
-  .catch(error => console.error('Erro:', error));
-}
 </script>
 
 </html>

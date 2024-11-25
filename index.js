@@ -21,7 +21,7 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'api'
+    database: 'eleicao'
 });
 
 // Conexão ao banco de dados
@@ -33,9 +33,6 @@ db.connect((err) => {
     console.log('Conectado ao banco de dados com sucesso');
 });
 
-// ---> ROTAS PARA CANDIDATOS <---
-
-// Cadastrar candidato
 app.post('/candidato', (req, res) => {
     const { nome, idade = null, foto = null, descricao } = req.body;
 
@@ -53,17 +50,17 @@ app.post('/candidato', (req, res) => {
     });
 });
 
-// Listar candidatos
 app.get('/candidatos', (req, res) => {
-    const query = 'SELECT * FROM candidatos';
+    const query = 'SELECT id_candidato, nome, idade, foto, descricao FROM candidatos WHERE id_candidato != -1';
     db.query(query, (err, results) => {
         if (err) {
-            console.error('Erro ao listar candidatos:', err);
-            return res.status(500).json({ error: 'Erro ao listar candidatos' });
+            console.error('Erro ao buscar candidatos:', err);
+            return res.status(500).json({ error: 'Erro ao buscar candidatos' });
         }
-        res.status(200).json({ candidatos: results });
+        res.status(200).json(results);
     });
 });
+
 
 // Detalhes de um candidato
 app.get('/candidato/:id', (req, res) => {
@@ -86,19 +83,20 @@ app.get('/candidato/:id', (req, res) => {
 
 // Cadastrar usuário
 app.post('/usuario', (req, res) => {
-    const { nome, senha, ra, voto } = req.body;
+    const { nome, ra, senha, voto } = req.body;
 
-    if (!nome || !senha || !ra || !voto) {
+    if (!nome || !ra || !senha || !voto) {
         return res.status(400).json({ message: 'Nome, senha e RA são obrigatórios' });
     }
 
-    const query = 'INSERT INTO usuarios (ra, nome, senha, voto) VALUES (?, ?, ?, ?)';
-    db.query(query, [ra, nome, senha, voto], (err, result) => {
+    const query = 'INSERT INTO usuarios (nome, ra, senha, voto) VALUES (?, ?, ?, ?)';
+    db.query(query, [nome, ra, senha, voto], (err, result) => {
         if (err) {
             console.error('Erro ao cadastrar usuário:', err);
             return res.status(500).json({ error: 'Erro ao cadastrar usuário' });
         }
         res.status(201).json({ message: 'Usuário cadastrado com sucesso', id: result.insertId });
+        
     });
 });
 
@@ -110,7 +108,7 @@ app.post('/login', (req, res) => {
         return res.status(400).json({ message: 'RA e senha são obrigatórios' });
     }
 
-    const query = 'SELECT id_usuario, nome, email, senha FROM usuarios WHERE ra = ?';
+    const query = 'SELECT id_usuario, nome, senha FROM usuarios WHERE ra = ?';
     db.query(query, [ra], (err, results) => {
         if (err) {
             console.error('Erro ao realizar login:', err);
@@ -123,8 +121,7 @@ app.post('/login', (req, res) => {
             message: 'Login realizado com sucesso',
             usuario: {
                 id: results[0].id_usuario,
-                nome: results[0].nome,
-                email: results[0].email
+                nome: results[0].nome
             }
         });
     });
@@ -133,7 +130,7 @@ app.post('/login', (req, res) => {
 // Perfil do usuário
 app.get('/perfil/:id', (req, res) => {
     const { id } = req.params;
-    const query = 'SELECT id_usuario, nome, email, idade, voto FROM usuarios WHERE id_usuario = ?';
+    const query = 'SELECT id_usuario, nome, ra, voto FROM usuarios WHERE id_usuario = ?';
 
     db.query(query, [id], (err, results) => {
         if (err) {
@@ -149,59 +146,83 @@ app.get('/perfil/:id', (req, res) => {
 
 // Votar em um candidato
 app.post('/votar', (req, res) => {
-    const { id_usuario, id_candidato } = req.body;
+    const { id_candidato, id_usuario  } = req.body;  // Recebe o ID do usuário e o candidato
 
+    // Verifica se ambos os dados foram passados
     if (!id_usuario || !id_candidato) {
-        return res.status(400).json({ message: 'ID do usuário e ID do candidato são obrigatórios' });
+        return res.status(400).json({ message: 'Id de usuário ou candidato não encontrados' });
     }
 
-    const verificarQuery = 'SELECT voto FROM usuarios WHERE id_usuario = ?';
-    db.query(verificarQuery, [id_usuario], (err, results) => {
+    // Atualiza o voto do usuário
+    const query = 'UPDATE usuarios SET voto = ? WHERE id_usuario = ?';
+    db.query(query, [id_candidato, id_usuario], (err, results) => {
         if (err) {
-            console.error('Erro ao verificar voto:', err);
-            return res.status(500).json({ error: 'Erro ao verificar voto' });
-        }
-        if (results.length === 0) {
-            return res.status(404).json({ message: 'Usuário não encontrado' });
-        }
-        if (results[0].voto !== null) {
-            return res.status(409).json({ message: 'Usuário já votou' });
+            console.error('Erro ao registrar voto:', err);
+            return res.status(500).json({ error: 'Erro ao registrar voto' });
         }
 
-        const votarQuery = 'UPDATE usuarios SET voto = ? WHERE id_usuario = ?';
-        db.query(votarQuery, [id_candidato, id_usuario], (err) => {
-            if (err) {
-                console.error('Erro ao registrar voto:', err);
-                return res.status(500).json({ error: 'Erro ao registrar voto' });
-            }
-            res.status(200).json({ message: 'Voto registrado com sucesso!' });
+        // Se o usuário não foi encontrado, retorna erro
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado' });
+        }
+
+        res.status(200).json({
+            message: 'Voto registrado com sucesso!'
         });
     });
 });
 
 // Resultados de votação
 app.get('/resultados', (req, res) => {
-    const query = `
-        SELECT 
-            c.id_candidato,
-            c.nome AS nome_candidato,
-            COUNT(u.voto) AS total_votos
-        FROM 
-            candidatos c
-        LEFT JOIN 
-            usuarios u ON c.id_candidato = u.voto
-        GROUP BY 
-            c.id_candidato, c.nome;
+    const queryCandidatos = `
+        SELECT c.id_candidato, c.nome AS nome_candidato, COUNT(u.voto) AS total_votos
+        FROM candidatos c
+        LEFT JOIN usuarios u ON c.id_candidato = u.voto
+        WHERE c.id_candidato != -1
+        GROUP BY c.id_candidato, c.nome
     `;
 
-    db.query(query, (err, results) => {
+    const queryTotalUsuarios = `
+        SELECT COUNT(*) AS total_usuarios FROM usuarios
+    `;
+
+    const queryVotosFeitos = `
+        SELECT COUNT(*) AS votos_feitos FROM usuarios WHERE voto IS NOT NULL AND voto != -1
+    `;
+
+    db.query(queryCandidatos, (err, candidatos) => {
         if (err) {
-            console.error('Erro ao buscar resultados:', err);
-            return res.status(500).json({ error: 'Erro ao buscar resultados' });
+            console.error('Erro ao carregar resultados dos candidatos:', err);
+            return res.status(500).json({ error: 'Erro ao carregar resultados' });
         }
-        res.status(200).json({ resultados: results });
+
+        db.query(queryTotalUsuarios, (err, totalUsuariosResult) => {
+            if (err) {
+                console.error('Erro ao carregar total de usuários:', err);
+                return res.status(500).json({ error: 'Erro ao carregar total de usuários' });
+            }
+
+            db.query(queryVotosFeitos, (err, votosFeitosResult) => {
+                if (err) {
+                    console.error('Erro ao carregar votos feitos:', err);
+                    return res.status(500).json({ error: 'Erro ao carregar votos feitos' });
+                }
+
+                const totalUsuarios = totalUsuariosResult[0].total_usuarios;
+                const votosFeitos = votosFeitosResult[0].votos_feitos;
+
+                res.json({
+                    resultados: candidatos,
+                    totalUsuarios,
+                    votosFeitos
+                });
+            });
+        });
     });
 });
+
+
+
 
 // Iniciar o servidor
 const PORT = 3000;
