@@ -178,6 +178,5 @@ function desconectar() {
     localStorage.removeItem('nome');
     localStorage.removeItem('ra');
 
-    alert('Você foi desconectado.');
     window.location.href = '/index.html';
 }
