@@ -1,4 +1,4 @@
-DROP DATABASE eleicao;
+DROP DATABASE IF EXISTS eleicao;
 CREATE DATABASE eleicao;
 USE eleicao;
 

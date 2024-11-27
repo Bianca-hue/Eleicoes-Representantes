@@ -9,15 +9,16 @@
   <script src="js/script.js"></script>
 </head>
 
-<body>
+<body onload="carregarPerfil()">
   <div class="container">
     <h1>Perfil</h1>
 
     <div class="flex-center">
       <section class="flex-center">
         <img class="profile-photo" src="img/fotoPerfil.png" alt="Foto de perfil de Isabella" class="profile-image" />
-        <h1>Isabella</h1>
-        <h2>122854689</h2>
+        <h1 id="user-name">Perfil não conectado</h1>
+
+        <h2 id="user-ra">Perfil não conectado</h2>
       </section>
       
       <button class="btn">Informações da conta</button>

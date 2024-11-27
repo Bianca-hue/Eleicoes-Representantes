@@ -1,4 +1,3 @@
-// URL base do backend
 const apiUrl = "http://localhost:3000";
 
 async function inserirUsuario() {
@@ -7,15 +6,13 @@ async function inserirUsuario() {
     const senha = document.getElementById("senha").value;
     const voto = -1;
 
-    // Verifica se os campos estão preenchidos
     if (!nome || !ra || !senha) {
         alert("Por favor, preencha todos os campos!");
         return;
     }
 
     try {
-        // Faz a requisição para o backend
-        const response = await fetch('http://localhost:3000/usuario', {
+        const response = await fetch(`${apiUrl}/usuario`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nome, ra, senha, voto })
@@ -24,11 +21,10 @@ async function inserirUsuario() {
         const result = await response.json();
 
         if (response.ok) {
-            alert(result.message); // Mostra a mensagem de sucesso
-            // Redireciona ou limpa os campos do formulário, se necessário
+            alert(result.message);
             window.location.href = '/index.html';
         } else {
-            alert(result.error || result.message); // Mostra a mensagem de erro
+            alert(result.error || result.message);
         }
     } catch (error) {
         console.error("Erro ao cadastrar usuário:", error);
@@ -46,7 +42,7 @@ async function login() {
     }
 
     try {
-        const response = await fetch('http://localhost:3000/login', {
+        const response = await fetch(`${apiUrl}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ra, senha })
@@ -54,14 +50,11 @@ async function login() {
 
         const result = await response.json();
 
-        console.log(result);  // Log da resposta para diagnóstico
-
         if (response.ok) {
-            // Armazenando o id_usuario e ra no localStorage
-            localStorage.setItem('id_usuario', result.usuario.id);  // Corrigido aqui
-            localStorage.setItem('ra', ra);  // O RA é o valor enviado pelo usuário
+            localStorage.setItem('id_usuario', result.usuario.id);
+            localStorage.setItem('ra', ra);
+            localStorage.setItem('nome', result.usuario.nome);
 
-            alert(result.message);
             window.location.href = '/Candidatos.html';
         } else {
             alert(result.error || result.message);
@@ -73,8 +66,7 @@ async function login() {
 }
 
 function votar(idCandidato) {
-    // Aqui você deve pegar o ID do usuário, talvez do localStorage ou de um cookie
-    const idUsuario = localStorage.getItem('id_usuario');  // Exemplo, certifique-se de ter o ID do usuário armazenado
+    const idUsuario = localStorage.getItem('id_usuario');
 
     if (!idUsuario) {
         alert("Usuário não encontrado ou não autenticado!");
@@ -93,7 +85,8 @@ function votar(idCandidato) {
     })
         .then(response => response.json())
         .then(data => {
-            alert(data.message);  // Exibe a mensagem retornada do servidor
+            console.log(data.message);
+            window.location.href = '/resultados.html';
         })
         .catch(error => {
             console.error('Erro:', error);
@@ -101,9 +94,7 @@ function votar(idCandidato) {
         });
 }
 
-// Resultados
 document.addEventListener('DOMContentLoaded', async () => {
-
     try {
         const response = await fetch(`${apiUrl}/resultados`);
         const data = await response.json();
@@ -111,22 +102,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (data.resultados) {
             const candidatosContainer = document.querySelector('.candidates');
             const totalVotesChart = document.querySelector('.chart span');
-
-            // Total de usuários e votos feitos
             const totalUsuarios = data.totalUsuarios;
             const votosFeitos = data.votosFeitos;
-
-            // Calcula a porcentagem de votos feitos
             const votosFeitosPercentage = totalUsuarios ? ((votosFeitos / totalUsuarios) * 100).toFixed(2) : 0;
-
-            // Total de votos válidos
             const totalVotosValidos = data.resultados.reduce((sum, candidato) => sum + candidato.total_votos, 0);
 
-            // Adiciona cada candidato dinamicamente
             candidatosContainer.innerHTML = '';
             data.resultados.forEach((candidato, index) => {
                 const percentage = totalVotosValidos ? ((candidato.total_votos / totalVotosValidos) * 100).toFixed(2) : 0;
-                const colors = ['#007bff', '#6f42c0', '#28a745', '#dc3545', '#ffc107']; // Definimos cores diferentes
+                const colors = ['#007bff', '#6f42c0', '#28a745', '#dc3545', '#ffc107'];
 
                 const candidateElement = document.createElement('li');
                 candidateElement.className = 'candidate';
@@ -136,7 +120,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 candidatosContainer.appendChild(candidateElement);
             });
 
-            // Atualiza a porcentagem total de votos feitos
             totalVotesChart.textContent = `${votosFeitosPercentage}%`;
         } else {
             throw new Error('Não foi possível carregar os resultados.');
@@ -146,7 +129,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Candidatos
 async function carregarCandidatos() {
     try {
         const response = await fetch(`${apiUrl}/candidatos`);
@@ -156,7 +138,7 @@ async function carregarCandidatos() {
         const candidatos = await response.json();
 
         const container = document.querySelector('.candidates-container');
-        container.innerHTML = ''; // Limpa qualquer conteúdo existente
+        container.innerHTML = '';
 
         candidatos.forEach(candidato => {
             const card = document.createElement('div');
@@ -177,5 +159,25 @@ async function carregarCandidatos() {
     }
 }
 
-// Carrega os candidatos ao abrir a página
 document.addEventListener('DOMContentLoaded', carregarCandidatos);
+
+function carregarPerfil() {
+    const userNameElement = document.getElementById('user-name');
+    const userRaElement = document.getElementById('user-ra');
+    const userName = localStorage.getItem('nome');
+    const userRa = localStorage.getItem('ra');
+
+    if (userName && userRa) {
+        userNameElement.innerHTML = userName;
+        userRaElement.innerHTML = userRa;
+    }
+}
+
+function desconectar() {
+    localStorage.removeItem('id_usuario');
+    localStorage.removeItem('nome');
+    localStorage.removeItem('ra');
+
+    alert('Você foi desconectado.');
+    window.location.href = '/index.html';
+}
