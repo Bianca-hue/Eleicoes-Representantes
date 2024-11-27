@@ -1,0 +1,342 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+/* Container principal para cada tela */
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.flex-center{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flex-start{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+h1, h2 {
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+h1{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+h2{
+    font-weight: normal;
+    font-size: 18px;
+}
+
+p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Labels e Inputs */
+label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"],
+textarea {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+textarea {
+    resize: vertical;
+    font-family: Arial, sans-serif;
+}
+
+/* Campo de senha com ícone */
+.password-input {
+    position: relative;
+}
+
+.password-input input {
+    padding-right: 40px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+}
+
+.nav-bar{
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    font-size: 12px;
+
+    & .btn{
+        font-size: 12px;
+    }
+}
+
+/* Botões gerais */
+.btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+    width: 100%;
+    min-width: 30%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.profile-photo{
+    width: 35%; 
+    border-radius: 20px;
+    border: 1px solid #fff;
+    margin-bottom: 5%;
+}
+
+.candidate-photo{
+    width: 100%; 
+    border-radius: 20px;
+    border: 1px solid #fff;
+    margin-bottom: 5%;
+}
+
+.btn-primary{
+    background-color: #1a73e8;
+    color: #fff;
+}
+
+.btn-error{
+    background-color: #DC3545;
+    color: #fff;
+}
+
+.btn-error:hover{
+    background-color: #99232e !important;
+}
+
+
+.btn-success{
+    background-color: #28A745;
+    color: #fff;
+}
+
+.btn:hover {
+    background-color: #1558b0;
+    color: #fff;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.login-link a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.logo {
+    width: 100%;
+}
+
+.results-container {
+    margin-bottom: 20px;
+}
+
+/* Lista de candidatos */
+.candidates {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.candidate {
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Gráfico de resultados */
+.chart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Botões de navegação */
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.buttons button {
+    flex: 1;
+    padding: 10px;
+    margin: 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buttons .active {
+    background-color: #1a73e8;
+    color: #fff;
+}
+
+.buttons button:hover {
+    background-color: #ccc;
+}
+
+/* Página de candidatos */
+.candidates-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.candidate-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+.candidate-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.candidate-card h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin: 5px 0;
+}
+
+.candidate-card p {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+}
+
+.candidate-card .btn {
+    margin-top: 15px;
+    width: 100%;
+}
+
+/* Rodapé de navegação */
+.footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer a {
+    text-align: center;
+    color: #555;
+    font-size: 14px;
+    text-decoration: none;
+    flex: 1;
+}
+
+.footer a.active {
+    color: #1a73e8;
+    font-weight: bold;
+}
+
+.footer a span {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
